@@ -39,8 +39,13 @@ def test_length_data_response():
 
 def test_single_user():
     query = '/8'
+    schema = load_json_schema('get_single_user.json')
 
     response = reqres_session.get(f'{path_users}{query}')
+
+    logging.info(response.json())
+
+    validate(instance=response.json(), schema=schema)
 
     assert response.status_code == 200
     assert response.json()['data']['id'] == 8
