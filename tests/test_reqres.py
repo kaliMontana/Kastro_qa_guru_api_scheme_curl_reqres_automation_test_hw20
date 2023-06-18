@@ -56,8 +56,13 @@ def test_single_user():
 
 def test_single_user_no_found():
     query = '/18'
+    schema = load_json_schema('get_single_user_no_found.json')
 
     response = reqres_session.get(f'{path_users}{query}')
+
+    logging.info(response.json())
+
+    validate(instance=response.json(), schema=schema)
 
     assert response.status_code == 404
     assert response.json() == {}
