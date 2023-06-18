@@ -68,7 +68,7 @@ def test_single_user_no_found():
     assert response.json() == {}
 
 
-def test_create():
+def test_create_user():
     name = 'Dania'
     job = 'Pilot'
     schema = load_json_schema('post_create_user.json')
@@ -80,6 +80,8 @@ def test_create():
             'job': job
         }
     )
+
+    logging.info(response.json())
 
     validate(instance=response.json(), schema=schema)
 
