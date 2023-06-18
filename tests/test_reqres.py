@@ -26,8 +26,13 @@ def test_page_number():
 def test_length_data_response():
     page = 1
     length = 3
+    schema = load_json_schema('get_user_list.json')
 
     response = reqres_session.get(path_users, params={'page': page, 'per_page': length})
+
+    logging.info(response.json())
+
+    validate(instance=response.json(), schema=schema)
 
     assert len(response.json()['data']) == length
 
