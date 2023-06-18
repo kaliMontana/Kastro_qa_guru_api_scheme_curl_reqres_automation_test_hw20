@@ -171,6 +171,7 @@ def test_login_successful():
     email = 'emma.wong@reqres.in'
     password = 'cyg123'
     token = 'QpwL5tke4Pnpja7X3'
+    schema = load_json_schema('post_login_successful.json')
 
     response = reqres_session.post(
         url=f'{path_login}',
@@ -179,6 +180,10 @@ def test_login_successful():
             'password': password
         }
     )
+
+    logging.info(response.json())
+
+    validate(instance=response.json(), schema=schema)
 
     assert response.status_code == requests.codes.ok
     assert response.json()['token'] == token
