@@ -113,7 +113,7 @@ def test_update_user_patch():
     assert response.json()['job'] == job
 
 
-def test_delete():
+def test_delete_user():
     query = '/8'
 
     response = reqres_session.delete(url=f'{path_users}{query}')
