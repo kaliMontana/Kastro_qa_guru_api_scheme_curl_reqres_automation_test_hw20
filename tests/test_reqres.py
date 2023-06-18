@@ -88,7 +88,7 @@ def test_create():
     assert response.json()['job'] == job
 
 
-def test_patch():
+def test_update_patch():
     query = '/8'
     name = 'Ximena'
     job = 'accountant'
