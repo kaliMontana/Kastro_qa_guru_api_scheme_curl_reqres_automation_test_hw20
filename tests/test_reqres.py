@@ -12,10 +12,13 @@ path_login = '/api/login'
 
 def test_page_number():
     page = 1
+    schema = load_json_schema('get_user_list.json')
 
     response = reqres_session.get(path_users, params={'page': page})
 
     logging.info(response.json())
+
+    validate(instance=response.json(), schema=schema)
 
     assert response.status_code == 200
 
