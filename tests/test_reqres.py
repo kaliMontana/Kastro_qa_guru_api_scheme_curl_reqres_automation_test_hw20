@@ -1,8 +1,9 @@
 import logging
 
 import requests
+from jsonschema.validators import validate
 
-from helper import reqres_session
+from helper import reqres_session, load_json_schema
 
 path_users = '/api/users'
 path_register = '/api/register'
@@ -25,7 +26,7 @@ def test_length_data_response():
 
     response = reqres_session.get(path_users, params={'page': page, 'per_page': length})
 
-    assert len(response.json()['data']) == 3
+    assert len(response.json()['data']) == length
 
 
 def test_single_user():
@@ -52,6 +53,7 @@ def test_single_user_no_found():
 def test_create():
     name = 'Dania'
     job = 'Pilot'
+    schema = load_json_schema('post_create_user.json')
 
     response = reqres_session.post(
         url=f'{path_users}',
@@ -60,6 +62,8 @@ def test_create():
             'job': job
         }
     )
+
+    validate(instance=response.json(), schema=schema)
 
     assert response.status_code == 201
     assert response.json()['name'] == name
