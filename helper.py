@@ -1,3 +1,5 @@
+import logging
+
 import curlify
 from requests import Session, Response
 
@@ -10,6 +12,7 @@ class CustomSession(Session):
     def request(self, method, url, *args, **kwargs) -> Response:
         response = super(CustomSession, self).request(method=method, url=self.base_url + url, *args, **kwargs)
         curl = curlify.to_curl(response.request)
+        logging.info(curl)
         return response
 
 
