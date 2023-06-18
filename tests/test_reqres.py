@@ -2,7 +2,8 @@ import logging
 
 import requests
 
-base_url = 'https://reqres.in'
+from helper import reqres_session
+
 path_users = '/api/users'
 path_register = '/api/register'
 path_login = '/api/login'
@@ -11,7 +12,7 @@ path_login = '/api/login'
 def test_page_number():
     page = 1
 
-    response = requests.get(f'{base_url}{path_users}', params={'page': page})
+    response = reqres_session.get(path_users, params={'page': page})
 
     logging.info(response.json())
 
@@ -22,7 +23,7 @@ def test_length_data_response():
     page = 1
     length = 3
 
-    response = requests.get(f'{base_url}{path_users}', params={'page': page, 'per_page': length})
+    response = reqres_session.get(path_users, params={'page': page, 'per_page': length})
 
     assert len(response.json()['data']) == 3
 
@@ -30,7 +31,7 @@ def test_length_data_response():
 def test_single_user():
     query = '/8'
 
-    response = requests.get(f'{base_url}{path_users}{query}')
+    response = reqres_session.get(f'{path_users}{query}')
 
     assert response.status_code == 200
     assert response.json()['data']['id'] == 8
@@ -42,7 +43,7 @@ def test_single_user():
 def test_single_user_no_found():
     query = '/18'
 
-    response = requests.get(f'{base_url}{path_users}{query}')
+    response = reqres_session.get(f'{path_users}{query}')
 
     assert response.status_code == 404
     assert response.json() == {}
@@ -52,8 +53,8 @@ def test_create():
     name = 'Dania'
     job = 'Pilot'
 
-    response = requests.post(
-        url=f'{base_url}{path_users}',
+    response = reqres_session.post(
+        url=f'{path_users}',
         json={
             'name': name,
             'job': job
@@ -70,8 +71,8 @@ def test_patch():
     name = 'Ximena'
     job = 'accountant'
 
-    response = requests.patch(
-        url=f'{base_url}{path_users}{query}',
+    response = reqres_session.patch(
+        url=f'{path_users}{query}',
         json={
             'name': name,
             'job': job
@@ -86,7 +87,7 @@ def test_patch():
 def test_delete():
     query = '/8'
 
-    response = requests.delete(url=f'{base_url}{path_users}{query}')
+    response = reqres_session.delete(url=f'{path_users}{query}')
 
     assert response.status_code == 204
     assert response.text == ''
@@ -98,8 +99,8 @@ def test_register_successful():
     id = 3
     token = 'QpwL5tke4Pnpja7X3'
 
-    response = requests.post(
-        url=f'{base_url}{path_register}',
+    response = reqres_session.post(
+        url=f'{path_register}',
         json={
             'email': email,
             'password': password
@@ -115,8 +116,8 @@ def test_register_unsuccessful():
     email = 'emma.wong@reqres.in'
     error_message = 'Missing password'
 
-    response = requests.post(
-        url=f'{base_url}{path_register}',
+    response = reqres_session.post(
+        url=f'{path_register}',
         json={
             'email': email
         }
@@ -132,8 +133,8 @@ def test_login_successful():
     password = 'cyg123'
     token = 'QpwL5tke4Pnpja7X3'
 
-    response = requests.post(
-        url=f'{base_url}{path_login}',
+    response = reqres_session.post(
+        url=f'{path_login}',
         json={
             'email': email,
             'password': password
