@@ -127,6 +127,7 @@ def test_register_successful():
     password = '12345'
     id = 3
     token = 'QpwL5tke4Pnpja7X3'
+    schema = load_json_schema('post_register_successful.json')
 
     response = reqres_session.post(
         url=f'{path_register}',
@@ -135,6 +136,10 @@ def test_register_successful():
             'password': password
         }
     )
+
+    logging.info(response.json())
+
+    validate(instance=response.json(), schema=schema)
 
     assert response.status_code == 200
     assert response.json()['id'] == id
