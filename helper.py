@@ -1,7 +1,15 @@
+import json
 import logging
+import os.path
 
 import curlify
 from requests import Session, Response
+
+
+def load_json_schema(name: str):
+    schema_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'schemas', name)
+    with open(schema_path) as schema:
+        return json.loads(schema.read())
 
 
 class CustomSession(Session):
