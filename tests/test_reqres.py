@@ -149,6 +149,7 @@ def test_register_successful():
 def test_register_unsuccessful():
     email = 'emma.wong@reqres.in'
     error_message = 'Missing password'
+    schema = load_json_schema('post_register_unsuccessful.json')
 
     response = reqres_session.post(
         url=f'{path_register}',
@@ -156,6 +157,10 @@ def test_register_unsuccessful():
             'email': email
         }
     )
+
+    logging.info(response.json())
+
+    validate(instance=response.json(), schema=schema)
 
     assert response.status_code == 400
     assert response.status_code == requests.codes.bad_request
