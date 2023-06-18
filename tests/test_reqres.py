@@ -88,10 +88,11 @@ def test_create():
     assert response.json()['job'] == job
 
 
-def test_update_patch():
+def test_update_user_patch():
     query = '/8'
     name = 'Ximena'
     job = 'accountant'
+    schema = load_json_schema('patch_update_user.json')
 
     response = reqres_session.patch(
         url=f'{path_users}{query}',
@@ -100,6 +101,10 @@ def test_update_patch():
             'job': job
         }
     )
+
+    logging.info(response.json())
+
+    validate(instance=response.json(), schema=schema)
 
     assert response.status_code == 200
     assert response.json()['name'] == name
