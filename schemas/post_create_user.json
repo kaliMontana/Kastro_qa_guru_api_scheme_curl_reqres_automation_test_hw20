@@ -6,6 +6,7 @@
     "id",
     "createdAt"
   ],
+  "additionalProperties": false,
   "properties": {
     "name": {
       "type": "string"
