@@ -2,7 +2,10 @@ import json
 import logging
 import os.path
 
+import allure
 import curlify
+from allure_commons._allure import step
+from allure_commons.types import AttachmentType
 from requests import Session, Response
 
 
@@ -21,7 +24,18 @@ class CustomSession(Session):
         response = super(CustomSession, self).request(method=method, url=self.base_url + url, *args, **kwargs)
         curl = curlify.to_curl(response.request)
         logging.info(curl)
-        return response
+        with step(f'{method} {url}'):
+            allure.attach(body=curl, name='Request curl', attachment_type=AttachmentType.TEXT, extension='text')
+
+            try:
+                response_body = response.json()
+            except json.JSONDecodeError:
+                response_body = response.text
+
+            allure.attach(body=json.dumps(response_body, indent=2), name='Response body',
+                          attachment_type=AttachmentType.JSON)
+
+            return response
 
 
 base_url = 'https://reqres.in'
