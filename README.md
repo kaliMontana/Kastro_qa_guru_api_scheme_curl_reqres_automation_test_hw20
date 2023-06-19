@@ -10,3 +10,7 @@
 Start one test:
 
 pytest tests/test_reqres.py::test_patch
+
+Start all tests:
+
+pytest .
