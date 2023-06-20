@@ -23,9 +23,11 @@ class CustomSession(Session):
     def request(self, method, url, *args, **kwargs) -> Response:
         response = super(CustomSession, self).request(method=method, url=self.base_url + url, *args, **kwargs)
         curl = curlify.to_curl(response.request)
-        logging.info(curl)
+        status_code = response.status_code
+        logging.info(f'Status code: {status_code}\n{curl}')
         with step(f'{method} {url}'):
-            allure.attach(body=curl, name='Request curl', attachment_type=AttachmentType.TEXT, extension='text')
+            allure.attach(body=f'Status code: {status_code}\n{curl}', name='Request curl',
+                          attachment_type=AttachmentType.TEXT, extension='text')
 
             try:
                 response_body = response.json()
